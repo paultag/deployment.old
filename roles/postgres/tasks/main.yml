@@ -1,0 +1,5 @@
+---
+- name: update postgres
+  command: docker pull paultag/postgres
+  notify:
+      restart postgres

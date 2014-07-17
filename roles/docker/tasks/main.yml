@@ -1,0 +1,3 @@
+---
+- name: install docker
+  apt: pkg=docker.io state=present
