@@ -1,0 +1,7 @@
+---
+# This sets up & creates a Docker container server.
+
+- name: install docker
+  apt: pkg=docker.io state=installed 
+
+# - name: add skydns & skydock; start & replace docker default file. restart.
