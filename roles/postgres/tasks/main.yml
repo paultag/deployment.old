@@ -1,0 +1,21 @@
+---
+
+- command: docker inspect postgres
+  register: postgres_inspect
+  ignore_errors: True
+
+- name: Update PostgreSQL (docker)
+  command: docker pull paultag/postgres
+
+- name: Install PostgreSQL Service
+  copy: src=postgres.conf dest=/etc/init/postgres.conf owner=root group=root mode=0644
+
+- name: Stopping PostgreSQL (docker)
+  service: name=postgres state=stopped
+
+- name: Purging PostgreSQL (docker)
+  command: docker rm postgres
+  when: postgres_inspect.rc == 0
+
+- name: Starting PostgreSQL (docker)
+  service: name=postgres state=started
