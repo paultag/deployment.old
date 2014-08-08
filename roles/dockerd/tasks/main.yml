@@ -7,5 +7,8 @@
 - name: Install Docker
   apt: name=docker.io update_cache=yes state=present
 
+- name: Starting Docker
+  service: name=docker.io state=started
+
 - name: Add the Ubuntu user to the Docker group
   user: name=ubuntu groups=docker append=yes
