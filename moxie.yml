@@ -1,0 +1,7 @@
+---
+- hosts: moxie
+  remote_user: ubuntu
+  sudo: yes
+
+  roles:
+      - dockerd
