@@ -1,0 +1,11 @@
+---
+# This role handles the install of Docker
+
+- name: Install the Docker Backports repo.
+  apt_repository: repo='ppa:docker-maint/backports'
+
+- name: Install Docker
+  apt: name=docker.io update_cache=yes state=present
+
+- name: Add the Ubuntu user to the Docker group
+  user: name=ubuntu groups=docker append=yes
