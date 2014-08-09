@@ -16,6 +16,12 @@
 - name: Add in a nginx serve directory.
   file: path=/srv/docker/nginx/serve/ state=directory
 
+- name: Add in a nginx serve directory.
+  file: path=/srv/docker/nginx/serve/catchall/ state=directory
+
+- name: Install nginx catchall index.
+  copy: src=index.html dest=/srv/docker/nginx/serve/catchall/index.html owner=root group=root mode=0644
+
 - name: Add in a nginx logs directory.
   file: path=/srv/docker/nginx/serve/logs/ state=directory
 
