@@ -1,0 +1,21 @@
+server {
+    listen 80;
+    listen [::]:80;
+    # server_name moxie.sunlightlabs.com;
+    server_name moxie.sunlight.pault.ag;
+
+    access_log /serve/logs/moxie.access.log;
+    error_log  /serve/logs/moxie.error.log;
+
+    location / {
+        proxy_pass http://unix:/serve/sockets/moxie.sock;
+    }
+
+    location /websocket/ {
+        proxy_pass http://unix:/serve/sockets/moxie.sock:/websocket/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+    }
+}
+

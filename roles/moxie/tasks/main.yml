@@ -1,0 +1,27 @@
+---
+
+- command: docker inspect moxie
+  register: moxie_inspect
+  ignore_errors: True
+
+- name: Update Moxie Webserver (docker)
+  command: docker pull paultag/moxie
+
+- name: Install Moxie Webserver Service
+  copy: src=moxie.conf dest=/etc/init/moxie.conf owner=root group=root mode=0644
+
+- name: Install Moxie Webserver Service
+  copy: src=moxie dest=/srv/docker/nginx/sites-enabled/moxie owner=root group=root mode=0644
+
+- name: Stopping Moxie Webserver (docker)
+  service: name=moxie state=stopped
+
+- name: Purging Moxie Webserver (docker)
+  command: docker rm moxie
+  when: moxie_inspect.rc == 0
+
+- name: Starting Moxie Webserver (docker)
+  service: name=moxie state=started
+
+- name: Restarting nginx
+  service: name=nginx state=restarted
