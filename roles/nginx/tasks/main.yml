@@ -1,0 +1,33 @@
+---
+
+- command: docker inspect nginx
+  register: nginx_inspect
+  ignore_errors: True
+
+- name: Update nginx Daemon (docker)
+  command: docker pull paultag/nginx
+
+- name: Install nginx Daemon Service
+  copy: src=nginx.conf dest=/etc/init/nginx.conf owner=root group=root mode=0644
+
+- name: Add in a nginx sites directory.
+  file: path=/srv/docker/nginx/sites-enabled/ state=directory
+
+- name: Add in a nginx serve directory.
+  file: path=/srv/docker/nginx/serve/ state=directory
+
+- name: Add in a nginx logs directory.
+  file: path=/srv/docker/nginx/serve/logs/ state=directory
+
+- name: Install nginx Daemon Service
+  copy: src=default dest=/srv/docker/nginx/sites-enabled/ owner=root group=root mode=0644
+
+- name: Stopping nginx Daemon (docker)
+  service: name=nginx state=stopped
+
+- name: Purging nginx Daemon (docker)
+  command: docker rm nginx
+  when: nginx_inspect.rc == 0
+
+- name: Starting nginx Daemon (docker)
+  service: name=nginx state=started
