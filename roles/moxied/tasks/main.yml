@@ -10,6 +10,12 @@
 - name: Install Moxie Daemon Service
   copy: src=moxied.conf dest=/etc/init/moxied.conf owner=root group=root mode=0644
 
+- name: Install Moxie Configuration
+  copy: src=moxie.sh dest=/etc/docker/moxie.sh owner=root group=root mode=0644
+
+- name: Apply Moxie Migrations
+  script: migrate.sh
+
 - name: Stopping Moxie Daemon (docker)
   service: name=moxied state=stopped
 

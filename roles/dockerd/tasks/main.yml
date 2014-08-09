@@ -12,3 +12,6 @@
 
 - name: Add the Ubuntu user to the Docker group
   user: name=ubuntu groups=docker append=yes
+
+- name: Add in a Docker config directory.
+  file: path=/etc/docker/ state=directory
