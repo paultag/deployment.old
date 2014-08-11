@@ -4,8 +4,12 @@
   register: moxied_inspect
   ignore_errors: True
 
+- script: pull.py paultag moxie
+  register: pull
+
 - name: Update Moxie Daemon (docker)
   command: docker pull paultag/moxie
+  when: pull.stdout.find('Yes') != -1
 
 - name: Install Moxie Daemon Service
   copy: src=moxied.conf dest=/etc/init/moxied.conf owner=root group=root mode=0644
@@ -15,6 +19,7 @@
 
 - name: Apply Moxie Migrations
   script: migrate.sh
+  when: pull.stdout.find('Yes') != -1
 
 - name: Install Moxie Config
   copy: src=jobs.yml dest=/srv/docker/moxie/jobs.yml owner=root group=root mode=0644
@@ -22,11 +27,17 @@
 
 - name: Stopping Moxie Daemon (docker)
   service: name=moxied state=stopped
+  when: pull.stdout.find('Yes') != -1
 
 - name: Purging Moxie Daemon (docker)
   command: docker rm moxied
   when: moxied_inspect.rc == 0
+  when: pull.stdout.find('Yes') != -1
 
 - name: Starting Moxie Daemon (docker)
   service: name=moxied state=started
+  when: pull.stdout.find('Yes') != -1
 
+- name: Starting Moxie Daemon (docker)
+  service: name=moxied state=restarted
+  when: pull.stdout.find('No') != -1
