@@ -1,5 +1,4 @@
 ---
-
 - command: docker inspect moxied
   register: moxied_inspect
   ignore_errors: True
@@ -13,9 +12,11 @@
 
 - name: Install Moxie Daemon Service
   copy: src=moxied.conf dest=/etc/init/moxied.conf owner=root group=root mode=0644
+  # notify: restart
 
 - name: Install Moxie Configuration
   copy: src=moxie.sh dest=/etc/docker/moxie.sh owner=root group=root mode=0644
+  # notify: restart
 
 - name: Apply Moxie Migrations
   script: migrate.sh
@@ -37,7 +38,3 @@
 - name: Starting Moxie Daemon (docker)
   service: name=moxied state=started
   when: pull.stdout.find('Yes') != -1
-
-- name: Starting Moxie Daemon (docker)
-  service: name=moxied state=restarted
-  when: pull.stdout.find('No') != -1
