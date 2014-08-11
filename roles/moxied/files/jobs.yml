@@ -1,0 +1,36 @@
+---
+maintainers:
+    - name: "Paul Tagliamonte"
+      email: "paultag@sunlightfoundation.com"
+
+
+volume-sets:
+    - name: "congress"
+      values:
+          - host: "/srv/docker/congress/"
+            container: "/congress/"
+
+jobs:
+    - name: "congress-bills"
+      description: "Congress Bill Scrapers"
+      maintainer: "paultag@sunlightfoundation.com"
+      interval: 3600
+      command: "bills"
+      image: "unitedstates/congress"
+      volumes: "congress"
+
+    - name: "congress-upcoming-house"
+      description: "Congress Upcoming House Floor Scrapers"
+      maintainer: "paultag@sunlightfoundation.com"
+      interval: 3600
+      command: "upcoming_house_floor"
+      image: "unitedstates/congress"
+      volumes: "congress"
+
+    - name: "congress-votes"
+      description: "Congress Votes Scrapers"
+      maintainer: "paultag@sunlightfoundation.com"
+      interval: 3600
+      command: "votes"
+      image: "unitedstates/congress"
+      volumes: "congress"

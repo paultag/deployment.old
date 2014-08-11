@@ -16,6 +16,10 @@
 - name: Apply Moxie Migrations
   script: migrate.sh
 
+- name: Install Moxie Config
+  copy: src=jobs.yml dest=/srv/docker/moxie/jobs.yml owner=root group=root mode=0644
+  notify: Reload Moxie Config
+
 - name: Stopping Moxie Daemon (docker)
   service: name=moxied state=stopped
 
@@ -25,3 +29,4 @@
 
 - name: Starting Moxie Daemon (docker)
   service: name=moxied state=started
+
